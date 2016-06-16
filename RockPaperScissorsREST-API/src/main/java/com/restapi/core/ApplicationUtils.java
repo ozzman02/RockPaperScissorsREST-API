@@ -8,39 +8,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
-
-@RestController
-public class SingleMatchRestController {
+public class ApplicationUtils {
 	
 	static final Map<String, String> table = new HashMap<String, String>();
 	
-	@RequestMapping(value = "/rockpaperscissors/singlematch", method = RequestMethod.POST)
-	public ResponseEntity<?> update(@RequestBody List<Game> games) {
-		if (games.size() % 2 != 0) {
-			return new ResponseEntity<Error>(new Error("The number of participantes must be an even number"), 
-					HttpStatus.FORBIDDEN);
-		} else if (validMatch(games)) { 
-			Game game = resolveMatch(games);
-			return new ResponseEntity<Game>(game, HttpStatus.OK);
-		} else {
-			return new ResponseEntity<Error>(new Error("There are duplicate player names"), 
-					HttpStatus.FORBIDDEN);
-		}
-	}
-	
-	@RequestMapping(value = "/rockpaperscissors/getPlayer", method = RequestMethod.GET)
-	public ResponseEntity<Player> get() {
-		Player p1 = new Player("Oscar");
-		return new ResponseEntity<Player>(p1, HttpStatus.OK);
-	}
-	
-	private static Game resolveMatch(List<Game> games) {
+	public static Game resolveMatch(List<Game> games) {
 		
 		Game g1 = games.get(0);
 		Game g2 = games.get(1);
@@ -87,7 +59,7 @@ public class SingleMatchRestController {
 		return players;
 	}
 	
-	private static boolean validMatch(List<Game> games) {
+	public static boolean validMatch(List<Game> games) {
 		List<String> players = getPlayers(games);
 		if (duplicatesFound(players)) {
 			return false;
