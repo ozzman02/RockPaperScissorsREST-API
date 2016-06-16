@@ -11,6 +11,9 @@ import java.util.Set;
 public class ApplicationUtils {
 	
 	static final Map<String, String> table = new HashMap<String, String>();
+	static List<Game> tournamentGames = new ArrayList<Game>();
+	static ArrayList<Game> match = new ArrayList<Game>();
+	static ArrayList<Game> winners = new ArrayList<Game>();
 	
 	public static Game resolveMatch(List<Game> games) {
 		
@@ -39,6 +42,24 @@ public class ApplicationUtils {
 		} else {
 			return null;
 		}
+	}
+	
+	public static Game resolveTournament(ArrayList<Tournament> tournaments) {
+		int count = 0;
+		for (Tournament tournament : tournaments) {
+			ArrayList<Game> games = tournament.getGames();
+			for(Game game : games) {
+				match.add(game);
+				count++;
+				if (count % 2 == 0) {
+					Game winner = resolveMatch(match);
+					winners.add(winner);
+					count = 0;
+				}
+			}
+		}
+		return null;
+		
 	}
 	
 	private static boolean duplicatesFound(List<String> players) {

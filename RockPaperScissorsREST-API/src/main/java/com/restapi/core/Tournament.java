@@ -1,46 +1,28 @@
 package com.restapi.core;
 
+import java.util.ArrayList;
+
 public class Tournament {
 	
-	private int id;
-	private Player player;
-	private int score;
+	private ArrayList<Game> games;
 	
 	public Tournament() {}
-	
-	public Tournament(int id, Player player, int score) {
-		setId(id);
-		setPlayer(player);
-		setScore(score);
+
+	public Tournament(ArrayList<Game> games) {
+		this.games = games;
 	}
 
-	public int getId() {
-		return id;
+	public ArrayList<Game> getGames() {
+		return games;
 	}
 
-	public void setId(int id) {
-		this.id = id;
-	}
-
-	public Player getPlayer() {
-		return player;
-	}
-
-	public void setPlayer(Player player) {
-		this.player = player;
-	}
-
-	public int getScore() {
-		return score;
-	}
-
-	public void setScore(int score) {
-		this.score = score;
+	public void setGames(ArrayList<Game> games) {
+		this.games = games;
 	}
 
 	@Override
 	public String toString() {
-		return "Tournament [id=" + id + ", player=" + player + ", score="
-				+ score + "]";
+		return "Tournament [games=" + games + "]";
 	}
+	
 }
