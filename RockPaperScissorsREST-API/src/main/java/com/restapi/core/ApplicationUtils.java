@@ -1,6 +1,8 @@
 package com.restapi.core;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -129,8 +131,9 @@ public class ApplicationUtils {
 		List<String> strategies = getStrategies(games);
 		Iterator<String> it = strategies.iterator();
 		while (it.hasNext() && !found) {
-			if (!it.next().equalsIgnoreCase("P") || !it.next().equalsIgnoreCase("S") 
-					|| !it.next().equalsIgnoreCase("R")) {
+			String strategy = it.next();
+			if (!strategy.equalsIgnoreCase("P") && !strategy.equalsIgnoreCase("S") 
+					&& !strategy.equalsIgnoreCase("R")) {
 				found = true;
 			}
 		}
@@ -139,6 +142,29 @@ public class ApplicationUtils {
 		} else {
 			return true;
 		}
+	}
+	
+	public static List<Score> sortList(List<Score> scores, Integer count) {
+		
+		List<Score> results = new ArrayList<Score>();
+		int index = 0;
+		
+		Collections.sort(scores, new Comparator<Score>(){
+
+			@Override
+			public int compare(Score o1, Score o2) {
+				return (Integer.valueOf(o2.getScore()).compareTo(Integer.valueOf(o1.getScore())));
+			}
+		});
+		
+		Iterator<Score> it = scores.iterator();
+		
+		while (it.hasNext() && index < count) {
+			results.add(it.next());
+			index++;
+		}
+		
+		return results;
 	}
 	
 }

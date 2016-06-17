@@ -3,6 +3,7 @@ package com.restapi.core;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -12,6 +13,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class ApplicationRestController {
+	
+	@Autowired
+	DatabaseRestController databaseRestController;
 	
 	@RequestMapping(value = "/rockpaperscissors/singlematch", method = RequestMethod.POST)
 	public ResponseEntity<?> singleMatch(@RequestBody List<Game> games) {
@@ -31,7 +35,7 @@ public class ApplicationRestController {
 		}
 	}
 	
-	@RequestMapping(value = "/rockpaperscissors/championship", method = RequestMethod.POST)
+	@RequestMapping(value = "/rockpaperscissors/championship/result", method = RequestMethod.POST)
 	public ResponseEntity<?> championshipResult(@RequestBody Tournament tournament) {
 		if (tournament.getGames().size() % 2 != 0) {
 			return new ResponseEntity<Error>(new Error("The The number of participantes must be an even number"),
@@ -42,6 +46,9 @@ public class ApplicationRestController {
 		} else if (ApplicationUtils.validMatch(tournament.getGames())) {
 			ArrayList<Game> results = ApplicationUtils.resolveTournament(tournament.getGames());
 			Game champion = results.get(0);
+			
+			databaseRestController.updatePlayerScores(results.get(0).getPlayerName(), results.get(1).getPlayerName());
+			
 			return new ResponseEntity<Game>(champion, HttpStatus.OK);
 		} else {
 			return new ResponseEntity<Error>(new Error("There are duplicate player names"), 

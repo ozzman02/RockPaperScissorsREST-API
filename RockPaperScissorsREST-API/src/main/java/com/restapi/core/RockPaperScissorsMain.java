@@ -9,5 +9,8 @@ public class RockPaperScissorsMain {
 	public static void main(String[] args) {
 		SpringApplication.run(RockPaperScissorsMain.class, args);
 	}
-	
+		
 }
+
+
+
