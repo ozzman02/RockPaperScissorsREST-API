@@ -4,9 +4,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class RockPaperScissorsRestApiApplication {
+public class RockPaperScissorsMain {
 
 	public static void main(String[] args) {
-		SpringApplication.run(RockPaperScissorsRestApiApplication.class, args);
+		SpringApplication.run(RockPaperScissorsMain.class, args);
 	}
+	
 }

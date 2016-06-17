@@ -14,6 +14,33 @@ public class ApplicationUtils {
 	static ArrayList<Game> match = new ArrayList<Game>();
 	static ArrayList<Game> winners = new ArrayList<Game>();
 	
+	private static boolean duplicatesFound(List<String> players) {
+		Set<String> set = new HashSet<String>(players);
+		if (set.size() < players.size()) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	private static List<String> getPlayers(List<Game> games) {
+		List<String> players = new ArrayList<String>();
+		Iterator<Game> it = games.iterator();
+		while (it.hasNext()) {
+			players.add(it.next().getPlayerName());
+		}
+		return players;
+	}
+	
+	private static List<String> getStrategies(List<Game> games) {
+		List<String> strategies = new ArrayList<String>();
+		Iterator<Game> it = games.iterator();
+		while (it.hasNext()) {
+			strategies.add(it.next().getStrategy());
+		}
+		return strategies;
+	}
+	
 	public static ArrayList<Game> resolveMatch(List<Game> games) {
 		
 		Game g1 = games.get(0);
@@ -62,53 +89,52 @@ public class ApplicationUtils {
 	}
 	
 	public static ArrayList<Game> resolveTournament(List<Game> games) {
-		int count = 0;
-		for (Game game : games) {
-			match.add(game);
-			count++;
-			if (count % 2 == 0) {
-				winners.add(resolveMatch(match).get(0));
-				match.remove(0);
-				match.remove(0);
-				count = 0;
-			}
-		}
-		ArrayList<Game> list = new ArrayList<Game>();
-		for(Game g : winners) {
-			Game data = new Game(g.getPlayerName(), g.getStrategy());
-			list.add(data);
-		}
-		winners.clear();
-		if(list.size() == 2) {
-			winners = resolveMatch(list);
-		} else {
-			resolveTournament(list);
-		}	
 		
-		return winners;
-	}
-	
-	private static boolean duplicatesFound(List<String> players) {
-		Set<String> set = new HashSet<String>(players);
-		if (set.size() < players.size()) {
-			return true;
+		int count = 0;
+		ArrayList<Game> list = new ArrayList<Game>();
+		
+		if (games.size() == 2) {
+			return resolveMatch(games);
 		} else {
-			return false;
+			for (Game game : games) {
+				match.add(game);
+				count++;
+				if (count % 2 == 0) {
+					winners.add(resolveMatch(match).get(0));
+					match.clear();
+					count = 0;
+				}
+			}
+			for(Game g : winners) {
+				Game data = new Game(g.getPlayerName(), g.getStrategy());
+				list.add(data);
+			}
+			winners.clear();
+			return resolveTournament(list);
 		}
+		
 	}
-	
-	private static List<String> getPlayers(List<Game> games) {
-		List<String> players = new ArrayList<String>();
-		Iterator<Game> it = games.iterator();
-		while (it.hasNext()) {
-			players.add(it.next().getPlayerName());
-		}
-		return players;
-	}
-	
+
 	public static boolean validMatch(List<Game> games) {
 		List<String> players = getPlayers(games);
 		if (duplicatesFound(players)) {
+			return false;
+		} else {
+			return true;
+		}
+	}
+	
+	public static boolean validStrategies(List<Game> games) {
+		boolean found = false;
+		List<String> strategies = getStrategies(games);
+		Iterator<String> it = strategies.iterator();
+		while (it.hasNext() && !found) {
+			if (!it.next().equalsIgnoreCase("P") || !it.next().equalsIgnoreCase("S") 
+					|| !it.next().equalsIgnoreCase("R")) {
+				found = true;
+			}
+		}
+		if (found) {
 			return false;
 		} else {
 			return true;
