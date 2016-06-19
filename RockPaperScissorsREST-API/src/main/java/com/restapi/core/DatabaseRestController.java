@@ -32,13 +32,13 @@ public class DatabaseRestController {
 		List<Score> scores = this.scoreRepository.findAll();
 		if (scores.size() == 0) {
 			return new ResponseEntity<Error>(new Error("Empty database"), 
-					HttpStatus.FORBIDDEN);
+					HttpStatus.BAD_REQUEST);
 		} else if (scores.size() < count) {
 			return new ResponseEntity<Error>(new Error("Top parameter exceeds max database records count"), 
-					HttpStatus.FORBIDDEN);
+					HttpStatus.BAD_REQUEST);
 		} else if (count == 0) {
 			return new ResponseEntity<Error>(new Error("Top parameter value can't be 0"), 
-					HttpStatus.FORBIDDEN);
+					HttpStatus.BAD_REQUEST);
 		} else {
 			List<Score> results = ApplicationUtils.sortList(scores, count);
 			return new ResponseEntity<List<Score>>(results, HttpStatus.OK);
@@ -56,7 +56,7 @@ public class DatabaseRestController {
 	public ResponseEntity<?> updatePlayerScores(@RequestParam String playerName1, @RequestParam String playerName2) {
 		
 		if (playerName1.equals("") || playerName2.equals("")) {
-			return new ResponseEntity<Error>(new Error("Error, empty parameters"), HttpStatus.FORBIDDEN);
+			return new ResponseEntity<Error>(new Error("Error, empty parameters"), HttpStatus.BAD_REQUEST);
 		} else {
 			Score p1Entity = getPlayerScoreByName(playerName1);
 			Score p2Entity = getPlayerScoreByName(playerName2);
@@ -78,7 +78,6 @@ public class DatabaseRestController {
 				p2Entity.setScore(newScore2);
 				this.scoreRepository.save(p2Entity);
 			}
-		
 		}
 			
 		return new ResponseEntity<Success>(new Success("Success"), HttpStatus.OK);		
