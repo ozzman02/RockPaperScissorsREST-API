@@ -21,17 +21,17 @@ public class ApplicationRestController {
 	public ResponseEntity<?> singleMatch(@RequestBody List<Game> games) {
 		if (games.size() % 2 != 0) {
 			return new ResponseEntity<Error>(new Error("The number of participantes must be an even number"), 
-					HttpStatus.FORBIDDEN);
+					HttpStatus.BAD_REQUEST);
 		} else if (!ApplicationUtils.validStrategies(games)) {
 			return new ResponseEntity<Error>(new Error("Invalid strategies found."), 
-					HttpStatus.FORBIDDEN);
+					HttpStatus.BAD_REQUEST);
 		} else if (ApplicationUtils.validMatch(games)) { 
 			ArrayList<Game> results = ApplicationUtils.resolveMatch(games);
 			Game winner = results.get(0);
 			return new ResponseEntity<Game>(winner, HttpStatus.OK);
 		} else {
 			return new ResponseEntity<Error>(new Error("There are duplicate player names"), 
-					HttpStatus.FORBIDDEN);
+					HttpStatus.BAD_REQUEST);
 		}
 	}
 	
@@ -39,20 +39,18 @@ public class ApplicationRestController {
 	public ResponseEntity<?> championshipResult(@RequestBody Tournament tournament) {
 		if (tournament.getGames().size() % 2 != 0) {
 			return new ResponseEntity<Error>(new Error("The The number of participantes must be an even number"),
-					HttpStatus.FORBIDDEN);
+					HttpStatus.BAD_REQUEST);
 		} else if (!ApplicationUtils.validStrategies(tournament.getGames())) {
 			return new ResponseEntity<Error>(new Error("Invalid strategies found."), 
-					HttpStatus.FORBIDDEN);
+					HttpStatus.BAD_REQUEST);
 		} else if (ApplicationUtils.validMatch(tournament.getGames())) {
 			ArrayList<Game> results = ApplicationUtils.resolveTournament(tournament.getGames());
 			Game champion = results.get(0);
-			
 			databaseRestController.updatePlayerScores(results.get(0).getPlayerName(), results.get(1).getPlayerName());
-			
 			return new ResponseEntity<Game>(champion, HttpStatus.OK);
 		} else {
 			return new ResponseEntity<Error>(new Error("There are duplicate player names"), 
-					HttpStatus.FORBIDDEN);
+					HttpStatus.BAD_REQUEST);
 		}
 	}
 	
