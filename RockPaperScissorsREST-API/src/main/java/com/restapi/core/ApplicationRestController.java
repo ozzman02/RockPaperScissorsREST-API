@@ -199,6 +199,13 @@ public class ApplicationRestController {
 		return entity;
 	}
 	
+	/**
+	 * Update player scores.
+	 *
+	 * @param playerName1 the player name 1
+	 * @param playerName2 the player name 2
+	 * @return the response entity
+	 */
 	@RequestMapping(value = "/rockpaperscissors/championShip/storeWinners", method = RequestMethod.POST)
 	public ResponseEntity<?> updatePlayerScores(@RequestParam String playerName1, @RequestParam String playerName2) {
 		
