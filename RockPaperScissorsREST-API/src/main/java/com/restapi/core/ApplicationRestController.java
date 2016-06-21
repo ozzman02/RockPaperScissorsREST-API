@@ -174,7 +174,8 @@ public class ApplicationRestController {
 			return new ResponseEntity<Error>(new Error("Top parameter exceeds max database records count"), 
 				HttpStatus.BAD_REQUEST);
 		} 
-		else if (count == 0) {
+		else if (count == 0) 
+		{
 			return new ResponseEntity<Error>(new Error("Top parameter value can't be 0"), 
 				HttpStatus.BAD_REQUEST);
 		} 
@@ -241,7 +242,6 @@ public class ApplicationRestController {
 				p2Entity.setScore(newScore2);
 				this.scoreRepository.save(p2Entity);
 			}
-			
 		}
 			
 		return new ResponseEntity<Success>(new Success("Success"), HttpStatus.OK);		
