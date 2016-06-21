@@ -10,39 +10,87 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * The Class ApplicationUtils.
+ */
 public class ApplicationUtils {
 	
+	/** The Constant table. */
 	static final Map<String, String> table = new HashMap<String, String>();
+	
+	/** The match. */
 	static ArrayList<Game> match = new ArrayList<Game>();
+	
+	/** The winners. */
 	static ArrayList<Game> winners = new ArrayList<Game>();
 	
+	/**
+	 * Duplicates found.
+	 *
+	 * @param players the players
+	 * @return true, if successful
+	 */
 	private static boolean duplicatesFound(List<String> players) {
+		
 		Set<String> set = new HashSet<String>(players);
-		if (set.size() < players.size()) {
+		
+		if (set.size() < players.size()) 
+		{
 			return true;
-		} else {
+		} 
+		else 
+		{
 			return false;
 		}
+		
 	}
 	
+	/**
+	 * Gets the players.
+	 *
+	 * @param games the games
+	 * @return the players
+	 */
 	private static List<String> getPlayers(List<Game> games) {
+		
 		List<String> players = new ArrayList<String>();
+		
 		Iterator<Game> it = games.iterator();
-		while (it.hasNext()) {
+		
+		while (it.hasNext()) 
+		{
 			players.add(it.next().getPlayerName());
 		}
+		
 		return players;
 	}
 	
+	/**
+	 * Gets the strategies.
+	 *
+	 * @param games the games
+	 * @return the strategies
+	 */
 	private static List<String> getStrategies(List<Game> games) {
+		
 		List<String> strategies = new ArrayList<String>();
+		
 		Iterator<Game> it = games.iterator();
-		while (it.hasNext()) {
+		
+		while (it.hasNext()) 
+		{
 			strategies.add(it.next().getStrategy());
 		}
+		
 		return strategies;
 	}
 	
+	/**
+	 * Resolve match.
+	 *
+	 * @param games the games
+	 * @return the array list
+	 */
 	public static ArrayList<Game> resolveMatch(List<Game> games) {
 		
 		Game g1 = games.get(0);
@@ -71,10 +119,13 @@ public class ApplicationUtils {
 			firstPlace.setPlayerName(winnerData[0].trim());
 			firstPlace.setStrategy(winnerData[1].trim());
 			
-			if (winnerData[0].trim().equals(g1.getPlayerName())) {
+			if (winnerData[0].trim().equals(g1.getPlayerName())) 
+			{
 				secondPlace.setPlayerName(g2.getPlayerName());
 				secondPlace.setStrategy(g2.getStrategy());
-			} else if (winnerData[0].trim().equals(g2.getPlayerName())) {
+			} 
+			else if (winnerData[0].trim().equals(g2.getPlayerName())) 
+			{
 				secondPlace.setPlayerName(g1.getPlayerName());
 				secondPlace.setStrategy(g1.getStrategy());
 			}
@@ -85,81 +136,137 @@ public class ApplicationUtils {
 			
 			return results;
 			
-		} else {
+		} 
+		else 
+		{
 			return null;
 		}
+		
 	}
 	
+	/**
+	 * Resolve tournament.
+	 *
+	 * @param games the games
+	 * @return the array list
+	 */
 	public static ArrayList<Game> resolveTournament(List<Game> games) {
 		
 		int count = 0;
 		ArrayList<Game> list = new ArrayList<Game>();
 		
-		if (games.size() == 2) {
+		if (games.size() == 2) 
+		{
 			return resolveMatch(games);
-		} else {
-			for (Game game : games) {
+		} 
+		else 
+		{
+			for (Game game : games) 
+			{
 				match.add(game);
 				count++;
-				if (count % 2 == 0) {
+				if (count % 2 == 0) 
+				{
 					winners.add(resolveMatch(match).get(0));
 					match.clear();
 					count = 0;
 				}
 			}
-			for(Game g : winners) {
+			for(Game g : winners) 
+			{
 				Game data = new Game(g.getPlayerName(), g.getStrategy());
 				list.add(data);
 			}
+			
 			winners.clear();
+			
 			return resolveTournament(list);
 		}
 		
 	}
 
+	/**
+	 * Valid match.
+	 *
+	 * @param games the games
+	 * @return true, if successful
+	 */
 	public static boolean validMatch(List<Game> games) {
+		
 		List<String> players = getPlayers(games);
-		if (duplicatesFound(players)) {
+		
+		if (duplicatesFound(players)) 
+		{
 			return false;
-		} else {
+		} 
+		else 
+		{
 			return true;
 		}
+		
 	}
 	
+	/**
+	 * Valid strategies.
+	 *
+	 * @param games the games
+	 * @return true, if successful
+	 */
 	public static boolean validStrategies(List<Game> games) {
+		
 		boolean found = false;
+		
 		List<String> strategies = getStrategies(games);
+		
 		Iterator<String> it = strategies.iterator();
-		while (it.hasNext() && !found) {
+		
+		while (it.hasNext() && !found) 
+		{
 			String strategy = it.next();
+			
 			if (!strategy.equalsIgnoreCase("P") && !strategy.equalsIgnoreCase("S") 
-					&& !strategy.equalsIgnoreCase("R")) {
+					&& !strategy.equalsIgnoreCase("R")) 
+			{
 				found = true;
 			}
 		}
-		if (found) {
+		
+		if (found) 
+		{
 			return false;
-		} else {
+		} 
+		else 
+		{
 			return true;
 		}
+		
 	}
 	
+	/**
+	 * Sort list.
+	 *
+	 * @param scores the scores
+	 * @param count the count
+	 * @return the list
+	 */
 	public static List<Score> sortList(List<Score> scores, Integer count) {
 		
 		List<Score> results = new ArrayList<Score>();
 		int index = 0;
 		
-		Collections.sort(scores, new Comparator<Score>(){
-
+		Collections.sort(scores, new Comparator<Score>() {
+			
 			@Override
 			public int compare(Score o1, Score o2) {
 				return (Integer.valueOf(o2.getScore()).compareTo(Integer.valueOf(o1.getScore())));
 			}
+			
 		});
 		
 		Iterator<Score> it = scores.iterator();
 		
-		while (it.hasNext() && index < count) {
+		while (it.hasNext() && index < count) 
+		{
 			results.add(it.next());
 			index++;
 		}
